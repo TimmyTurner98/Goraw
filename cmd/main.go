@@ -65,6 +65,7 @@ type Product struct {
 }
 
 func main() {
+	server := &http.Server{}
 
 	connStr := "postgres://postgres:qwerty@localhost:5437/gopgtest?sslmode=disable"
 
@@ -126,13 +127,12 @@ func main() {
 	http.HandleFunc("/timmy", TimmyHandler)
 	http.HandleFunc("/", Handler)
 
-	// Логируем запуск сервера
-	log.Println("Starting server on https://localhost:8443")
-
-	err = http.ListenAndServeTLS(":8443", "tls/server.crt", "tls/server.key", nil)
+	// Запуск сервера на порту 8443
+	err = server.Run("8443", nil) // nil — это заглушка, так как маршруты уже обработаны через http.HandleFunc
 	if err != nil {
-		log.Fatalf("Failed to start HTTPS server: %v", err)
+		log.Fatalf("Ошибка при запуске сервера: %v", err)
 	}
+
 }
 
 func createProductTable(db *sql.DB) {
