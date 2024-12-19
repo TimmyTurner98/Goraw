@@ -129,7 +129,7 @@ func main() {
 	// Логируем запуск сервера
 	log.Println("Starting server on https://localhost:8443")
 
-	err = http.ListenAndServeTLS(":8443", "server.crt", "server.key", nil)
+	err = http.ListenAndServeTLS(":8443", "tls/server.crt", "tls/server.key", nil)
 	if err != nil {
 		log.Fatalf("Failed to start HTTPS server: %v", err)
 	}
