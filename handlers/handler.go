@@ -38,7 +38,7 @@ func TimmyHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-func fullnameHandler(w http.ResponseWriter, r *http.Request) {
+func FullnameHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
