@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	goraw "github.com/TimmyTurner98/Goraw"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
@@ -65,7 +66,7 @@ type Product struct {
 }
 
 func main() {
-	server := &http.Server{}
+	server := &goraw.Server{}
 
 	connStr := "postgres://postgres:qwerty@localhost:5437/gopgtest?sslmode=disable"
 
