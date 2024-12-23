@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	goraw "github.com/TimmyTurner98/Goraw"
-	"github.com/TimmyTurner98/Goraw/handlers"
+	"github.com/TimmyTurner98/Goraw/pkg/handlers"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
