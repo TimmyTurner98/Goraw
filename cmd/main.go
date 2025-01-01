@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	goraw "github.com/TimmyTurner98/Goraw"
 	"github.com/TimmyTurner98/Goraw/pkg/handlers"
+	"github.com/TimmyTurner98/Goraw/pkg/repository"
+	"github.com/TimmyTurner98/Goraw/pkg/service"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
@@ -26,9 +28,15 @@ func main() {
 	}
 	log.Println("Подключение к базе данных успешно установлено")
 
-	http.HandleFunc("/fullname", handlers.FullnameHandler)
-	http.HandleFunc("/timmy", handlers.TimmyHandler)
-	http.HandleFunc("/", handlers.Handler)
+	// Создание репозитория
+	userRepo := repository.NewGorawUserPostgres(db)
+	// Создание сервисов
+	userService := service.NewUserService(userRepo)
+	// Создание обработчиков
+	handler := handlers.NewHandler(userService)
+
+	// Регистрация обработчика для пути "/users"
+	http.HandleFunc("/users", handler.CreateUserHandler)
 
 	// Запуск сервера на порту 8443
 	err = server.Run("8443", nil) // nil — это заглушка, так как маршруты уже обработаны через http.HandleFunc
