@@ -3,54 +3,37 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/TimmyTurner98/Goraw/pkg/modules"
+	"github.com/TimmyTurner98/Goraw/pkg/service"
 	"net/http"
 )
 
-type Person struct {
-	Name  string `json: "name"`
-	Age   int    `json: "age"`
-	Email string `json: "email"`
+type Handler struct {
+	userService *service.UserService
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello HTTPS World!")
+func NewHandler(userService *service.UserService) *Handler {
+	return &Handler{userService: userService}
 }
 
-func TimmyHandler(w http.ResponseWriter, r *http.Request) {
-	// Создаем экземпляр структуры Person
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+func (h *Handler) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
 		return
 	}
-	person := Person{
-		Name: "Timmy",
-		Age:  26,
-	}
-	// Устанавливаем Content-Type как application/json
-	w.Header().Set("Content-Type", "application/json")
 
-	jsonData, err := json.MarshalIndent(person, "", "    ")
+	var user modules.User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
+	}
+
+	id, err := h.userService.CreateUser(user)
 	if err != nil {
-		http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// Отправляем JSON-ответ
-	w.Write(jsonData)
-}
 
-func FullnameHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	}
-	person := Person{
-		Name: "Temirlan",
-		Age:  26,
-	}
-	w.Header().Set("Content-Type", "application/json")
-	jsonData, err := json.MarshalIndent(person, "", "    ")
-	if err != nil {
-		http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
-		return
-	}
-	w.Write(jsonData)
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte(fmt.Sprintf("User created with ID: %d", id)))
 }
