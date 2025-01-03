@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/TimmyTurner98/Goraw/pkg/modules"
 )
 
@@ -21,4 +22,13 @@ func (r *GorawUserPostgres) CreatUser(user modules.User) (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+func (r *GorawUserPostgres) DeleteUser(userID int) error {
+	query := `DELETE FROM users WHERE id = $1`
+	_, err := r.db.Exec(query, userID)
+	if err != nil {
+		return fmt.Errorf("failed to delete user with id %d: %w", userID, err)
+	}
+	return nil
 }

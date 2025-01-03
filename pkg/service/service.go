@@ -19,3 +19,8 @@ func (s *UserService) CreateUser(user modules.User) (int, error) {
 	// Передаем обработанные данные в репозиторий
 	return s.repo.CreatUser(user)
 }
+
+func (s *UserService) DeleteUser(userID int) error {
+	// Можно добавить дополнительную логику (например, проверку, существует ли пользователь)
+	return s.repo.DeleteUser(userID)
+}
