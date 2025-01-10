@@ -5,3 +5,8 @@ type User struct {
 	Email    string
 	Password string
 }
+
+type UserWithoutPassword struct {
+	Name  string
+	Email string
+}
