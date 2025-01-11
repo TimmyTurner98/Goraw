@@ -57,7 +57,7 @@ func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	user, err := h.userService.GetUserByID(id) // передаем id в сервис
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			http.Error(w, "User not found", http.StatusNotFound) //400
+			http.Error(w, "User not found", http.StatusNotFound) //404
 		} else {
 			http.Error(w, "Internal server error", http.StatusInternalServerError) //500
 		}
@@ -66,6 +66,20 @@ func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user) // отправляем ответ в формате JSON
+}
+
+func (h *Handler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+	users, err := h.userService.GetAllUsers()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(users)
 }
 
 func (h *Handler) DeleteUserHandler(w http.ResponseWriter, r *http.Request) {

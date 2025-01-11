@@ -6,6 +6,6 @@ type UserRepository interface {
 	CreatUser(user modules.User) (int, error)
 	DeleteUser(id int) error
 	GetUserByID(id int) (*modules.UserWithoutPassword, error)
-	//GetAllUsers() ([]modules.User, error)
+	GetAllUsers() ([]modules.UserWithoutPassword, error)
 	//UpdateUser(user modules.User) error
 }

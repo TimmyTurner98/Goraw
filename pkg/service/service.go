@@ -24,6 +24,10 @@ func (s *UserService) GetUserByID(id int) (*modules.UserWithoutPassword, error) 
 	return s.repo.GetUserByID(id)
 }
 
+func (s *UserService) GetAllUsers() ([]modules.UserWithoutPassword, error) {
+	return s.repo.GetAllUsers()
+}
+
 func (s *UserService) DeleteUser(userID int) error {
 	// Можно добавить дополнительную логику (например, проверку, существует ли пользователь)
 	return s.repo.DeleteUser(userID)

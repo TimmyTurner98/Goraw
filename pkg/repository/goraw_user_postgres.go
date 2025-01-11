@@ -40,6 +40,39 @@ func (r *GorawUserPostgres) GetUserByID(id int) (*modules.UserWithoutPassword, e
 	return &modules.UserWithoutPassword{user.Name, user.Email}, nil
 }
 
+func (r *GorawUserPostgres) GetAllUsers() ([]modules.UserWithoutPassword, error) {
+	query := `SELECT name, email FROM users`
+
+	// Выполняем запрос и получаем строки результата
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close() // Закрываем результат после завершения работы
+
+	// Создаем срез для хранения пользователей
+	var users []modules.UserWithoutPassword
+
+	// Итерируемся по каждой строке результата
+	for rows.Next() {
+		var user modules.UserWithoutPassword
+		// Считываем данные строки в структуру
+		err := rows.Scan(&user.Name, &user.Email)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+		// Добавляем пользователя в срез
+		users = append(users, user)
+	}
+
+	// Проверяем наличие ошибок при итерации
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
+	return users, nil
+}
+
 func (r *GorawUserPostgres) DeleteUser(userID int) error {
 	query := `DELETE FROM users WHERE id = $1`
 	_, err := r.db.Exec(query, userID)
