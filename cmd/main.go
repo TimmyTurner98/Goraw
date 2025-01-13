@@ -139,8 +139,9 @@ func main() {
 	// Регистрация обработчика для пути "/users"
 	http.HandleFunc("/user", handler.CreateUserHandler)
 	http.HandleFunc("/delete-user", handler.DeleteUserHandler)
-	http.HandleFunc("/getuserbyid", handler.GetUserByID)
+	http.HandleFunc("/getuserbyid/", handler.GetUserByID)
 	http.HandleFunc("/getallusers", handler.GetAllUsers)
+	http.HandleFunc("/updateuser/", handler.UpdateUser)
 
 	// Запуск сервера на порту 8443
 	err = server.Run("8443", nil) // nil — это заглушка, так как маршруты уже обработаны через http.HandleFunc

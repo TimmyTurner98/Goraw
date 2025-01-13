@@ -28,6 +28,11 @@ func (s *UserService) GetAllUsers() ([]modules.UserWithoutPassword, error) {
 	return s.repo.GetAllUsers()
 }
 
+func (s *UserService) UpdateUser(id int, user modules.User) error {
+	// Передаем данные в репозиторий для обновления
+	return s.repo.UpdateUser(id, user)
+}
+
 func (s *UserService) DeleteUser(userID int) error {
 	// Можно добавить дополнительную логику (например, проверку, существует ли пользователь)
 	return s.repo.DeleteUser(userID)

@@ -7,5 +7,5 @@ type UserRepository interface {
 	DeleteUser(id int) error
 	GetUserByID(id int) (*modules.UserWithoutPassword, error)
 	GetAllUsers() ([]modules.UserWithoutPassword, error)
-	//UpdateUser(user modules.User) error
+	UpdateUser(id int, user modules.User) error
 }
